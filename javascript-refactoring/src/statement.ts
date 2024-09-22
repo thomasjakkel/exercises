@@ -7,10 +7,10 @@ import { Invoice, Play, Plays } from "./data/types"
  * @returns {string}          String with the total invoice order
  */
 
-const statement = (invoice: Invoice, plays: Plays) => {
+const generateInvoiceOrder = (invoice: Invoice, plays: Plays) => {
   let totalAmount = 0
   let volumeCredits = 0
-  let statementLog = ""
+  let invoiceOrderLog = ""
 
   // Calculate costs and credits for each play
   invoice.performances.forEach(({ playID, audience }) => {
@@ -22,7 +22,9 @@ const statement = (invoice: Invoice, plays: Plays) => {
     const { playCosts, playVolumeCredits } = calculatePlayCosts(play, audience)
 
     // Update variables for this play
-    statementLog += `  ${play.name}: ${format(playCosts)} (${audience} seats)\n`
+    invoiceOrderLog += `  ${play.name}: ${format(
+      playCosts
+    )} (${audience} seats)\n`
     totalAmount += playCosts
     volumeCredits += playVolumeCredits
   })
@@ -30,7 +32,7 @@ const statement = (invoice: Invoice, plays: Plays) => {
   // Add final sum and credits to statement
   return (
     `Statement for ${invoice.customer}\n` +
-    `${statementLog}` +
+    `${invoiceOrderLog}` +
     `Amount owed is ${format(totalAmount)}\n` +
     `You earned ${volumeCredits} credits\n`
   )
@@ -86,4 +88,4 @@ const format = (amount: number) => {
   }).format(amount / 100)
 }
 
-export default statement
+export default generateInvoiceOrder
