@@ -1,4 +1,7 @@
-function statement(invoice: any, plays: any) {
+import { Invoice } from "./data/types"
+import { Plays } from "./data/types"
+
+const statement = (invoice: Invoice, plays: Plays) => {
   let totalAmount = 0
   let volumeCredits = 0
   let result = `Statement for ${invoice.customer}\n`
