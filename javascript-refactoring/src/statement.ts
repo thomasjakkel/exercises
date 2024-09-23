@@ -1,13 +1,18 @@
-import { Invoice, Play, Plays } from "./data/types"
+import { Invoice, Play, Plays, PlayCostInformations } from "./data/types"
 
 /**
  * Generates a total invoice order for a customer with his booked performances
- * @param {Invoice} invoice   An invoice for each customer with all booked performances
- * @param {Plays} plays       Information of all plays to map the playID from the invoice.performances
+ * @param {Invoice} invoice   An invoice of a customer with all his booked performances
+ * @param {Plays} plays       Information of all plays to map the playID from the performances of an invoice
+ * @param {PlayCostInformations} playCostInformations Holds additional information for the costs of all plays
  * @returns {string}          String with the total invoice order
  */
 
-const generateInvoiceOrder = (invoice: Invoice, plays: Plays) => {
+const generateInvoiceOrder = (
+  invoice: Invoice,
+  plays: Plays,
+  playCostInformations: PlayCostInformations
+) => {
   let totalAmount = 0
   let volumeCredits = 0
   let invoiceOrderLog = ""
@@ -19,7 +24,11 @@ const generateInvoiceOrder = (invoice: Invoice, plays: Plays) => {
     }
 
     const play = plays[playID]
-    const { playCosts, playVolumeCredits } = calculatePlayCosts(play, audience)
+    const { playCosts, playVolumeCredits } = calculatePlayCosts(
+      play,
+      playCostInformations,
+      audience
+    )
 
     // Update variables for this play
     invoiceOrderLog += `  ${play.name}: ${format(
@@ -39,43 +48,46 @@ const generateInvoiceOrder = (invoice: Invoice, plays: Plays) => {
 }
 
 /**
- * Calculates costs and credits for a booked play
+ * Calculates costs and credits for a booked play of an invoice
  *
- * @param {Play} play
+ * @param {Play} play The booked play for which the costs are being calculated
+ * @param {PlayCostInformations} playCostInformations   Holds additional information for the costs of all plays
  * @param {number} audience Number of the audience in a play
- * @returns {{ playCosts: number; playVolumeCredits: number }}
+ * @returns {{ playCosts: number; playVolumeCredits: number }} Object with calculated costs of the booked play and credits earned
  */
-function calculatePlayCosts(
+const calculatePlayCosts = (
   play: Play,
+  playCostInformations: PlayCostInformations,
   audience: number
-): { playCosts: number; playVolumeCredits: number } {
-  let thisAmount = 0
-  let volumeCredits = 0
-  switch (play.type) {
-    case "tragedy":
-      thisAmount = 40000
-      if (audience > 30) {
-        thisAmount += 1000 * (audience - 30)
-      }
-      break
-    case "comedy":
-      thisAmount = 30000
-      if (audience > 20) {
-        thisAmount += 10000 + 500 * (audience - 20)
-      }
-      thisAmount += 300 * audience
-      break
-    default:
-      throw new Error(`unknown type: ${play.type}`)
+): { playCosts: number; playVolumeCredits: number } => {
+  const costInformation = playCostInformations[play.type]
+  if (!costInformation) {
+    throw new Error(`Playtype: ${play.type} not found in playCostInformations`)
   }
 
-  // add volume credits
-  volumeCredits += Math.max(audience - 30, 0)
-  // add extra credit for every ten comedy attendees
-  if ("comedy" === play.type) volumeCredits += Math.floor(audience / 5)
+  // Calculate costs for a play based on the playCostInformations
+  let extraCosts = 0
+  if (audience > costInformation.audienceTreshold) {
+    extraCosts =
+      costInformation.audienceTresholdBaseCosts +
+      costInformation.audienceTresholdCostsFactor *
+        (audience - costInformation.audienceTreshold)
+  }
+
+  const playCosts =
+    costInformation.baseCosts +
+    costInformation.extraCostsFactor * audience +
+    extraCosts
+
+  // Add volume credits and extra credit based on attendees bonus number
+  let extraCredits = 0
+  if (costInformation.volumeCreditsBonus > 0) {
+    extraCredits = Math.floor(audience / costInformation.volumeCreditsBonus)
+  }
+  const volumeCredits = Math.max(audience - 30, 0) + extraCredits
 
   return {
-    playCosts: thisAmount,
+    playCosts: playCosts,
     playVolumeCredits: volumeCredits,
   }
 }

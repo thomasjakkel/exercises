@@ -9,9 +9,24 @@ export type Invoices = {
 
 export type Play = {
   name: string
-  type: "tragedy" | "comedy"
+  type: PlayTypes
 }
 
 export type Plays = {
   [key: string]: Play
 }
+
+export type PlayCostInformation = {
+  baseCosts: number
+  audienceTreshold: number
+  audienceTresholdBaseCosts: number
+  audienceTresholdCostsFactor: number
+  extraCostsFactor: number
+  volumeCreditsBonus: number
+}
+
+export type PlayCostInformations = {
+  [key in PlayTypes]: PlayCostInformation
+}
+
+type PlayTypes = "tragedy" | "comedy"
