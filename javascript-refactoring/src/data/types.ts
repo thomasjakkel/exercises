@@ -3,10 +3,6 @@ export type Invoice = {
   performances: { playID: string; audience: number }[]
 }
 
-export type Invoices = {
-  [index: number]: Invoice
-}
-
 export type Play = {
   name: string
   type: PlayTypes

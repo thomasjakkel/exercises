@@ -1,4 +1,20 @@
-# Notes for Refactoring
+## Get started
+
+- Navigate to the root of javascript-refactoring and run:
+
+  `yarn install`
+
+- Run the project:
+
+  `yarn start`
+
+- Build the project:
+
+  `yarn build`
+
+  This transpiles the ts code into js in a `/dist` folder
+
+## Notes for Refactoring
 
 1. Initalize new node project and add typescript. Used es modules instead of commonjs
 2. Structured .json files to ts-objects with types

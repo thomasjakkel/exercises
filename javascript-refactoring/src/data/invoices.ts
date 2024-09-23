@@ -1,6 +1,6 @@
-import { Invoices } from "./types"
+import { Invoice } from "./types"
 
-export const invoices: Invoices = [
+export const invoices: Invoice[] = [
   {
     customer: "BigCo",
     performances: [
