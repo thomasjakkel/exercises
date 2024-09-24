@@ -19,6 +19,7 @@ export type PlayCostInformation = {
   audienceTresholdCostsFactor: number
   extraCostsFactor: number
   volumeCreditsBonus: number
+  volumeCreditsTreshold: number
 }
 
 export type PlayCostInformations = {

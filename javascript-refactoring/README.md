@@ -14,6 +14,16 @@
 
   This transpiles the ts code into js in a `/dist` folder
 
+- Run unit tests:
+
+  `yarn test`
+
+- Run test with coverage report:
+
+  `yarn test-coverage`
+
+  Test reports will be stored in `/coverage` folder
+
 ## Notes for Refactoring
 
 1. Initalize new node project and add typescript. Used es modules instead of commonjs

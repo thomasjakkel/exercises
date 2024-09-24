@@ -22,7 +22,8 @@ export const playCostInformations: PlayCostInformations = {
     audienceTresholdBaseCosts: 10000,
     audienceTresholdCostsFactor: 500,
     extraCostsFactor: 300,
-    volumeCreditsBonus: 10
+    volumeCreditsBonus: 10,
+    volumeCreditsTreshold: 30,
   },
   "tragedy": {
     baseCosts: 40000,
@@ -30,6 +31,7 @@ export const playCostInformations: PlayCostInformations = {
     audienceTresholdBaseCosts: 0,
     audienceTresholdCostsFactor: 1000,
     extraCostsFactor: 0,
-    volumeCreditsBonus: 0
+    volumeCreditsBonus: 0,
+    volumeCreditsTreshold: 30,
   },
 }

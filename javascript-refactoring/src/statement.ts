@@ -55,7 +55,7 @@ const generateInvoiceOrder = (
  * @param {number} audience Number of the audience in a play
  * @returns {{ playCosts: number; playVolumeCredits: number }} Object with calculated costs of the booked play and credits earned
  */
-const calculatePlayCosts = (
+export const calculatePlayCosts = (
   play: Play,
   playCostInformations: PlayCostInformations,
   audience: number
@@ -84,7 +84,8 @@ const calculatePlayCosts = (
   if (costInformation.volumeCreditsBonus > 0) {
     extraCredits = Math.floor(audience / costInformation.volumeCreditsBonus)
   }
-  const volumeCredits = Math.max(audience - 30, 0) + extraCredits
+  const volumeCredits =
+    Math.max(audience - costInformation.volumeCreditsTreshold, 0) + extraCredits
 
   return {
     playCosts: playCosts,
